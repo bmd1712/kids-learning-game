@@ -3,10 +3,11 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "build": "vite build",
-        "dev": "vite"
+        "build": "tailwindcss -i ./resources/css/custom.css -o ./public/css/app.css --minify",
+        "dev": "tailwindcss -i ./resources/css/custom.css -o ./public/css/app.css --watch"
     },
     "devDependencies": {
+        "@tailwindcss/cli": "^4.0.0",
         "@tailwindcss/vite": "^4.0.0",
         "axios": "^1.11.0",
         "concurrently": "^9.0.1",
