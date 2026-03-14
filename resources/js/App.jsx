@@ -2,6 +2,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import LoginPage from './pages/Login.jsx';
 import HomePage from './pages/Home.jsx';
+import SnakeGamePage from './pages/SnakeGame.jsx';
 import NotFoundPage from './pages/NotFound.jsx';
 import { useAuth } from './context/AuthContext.jsx';
 
@@ -57,6 +58,14 @@ export default function App() {
                 element={
                     <RequireAuth>
                         <HomePage />
+                    </RequireAuth>
+                }
+            />
+            <Route
+                path="/snake"
+                element={
+                    <RequireAuth>
+                        <SnakeGamePage />
                     </RequireAuth>
                 }
             />
