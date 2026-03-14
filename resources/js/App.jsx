@@ -2,7 +2,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import LoginPage from './pages/Login.jsx';
 import HomePage from './pages/Home.jsx';
-import SnakeGamePage from './pages/SnakeGame.jsx';
+import GameLoaderPage from './pages/GameLoader.jsx';
 import NotFoundPage from './pages/NotFound.jsx';
 import { useAuth } from './context/AuthContext.jsx';
 
@@ -62,10 +62,10 @@ export default function App() {
                 }
             />
             <Route
-                path="/snake"
+                path="/:slug"
                 element={
                     <RequireAuth>
-                        <SnakeGamePage />
+                        <GameLoaderPage />
                     </RequireAuth>
                 }
             />

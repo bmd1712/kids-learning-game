@@ -1,6 +1,7 @@
 ﻿import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
+import { GAME_CONFIGS } from '../lib/games.js';
 
 export default function HomePage() {
     const { user, logout } = useAuth();
@@ -17,13 +18,16 @@ export default function HomePage() {
                 </div>
 
                 <div className="grid gap-4 md:grid-cols-2">
-                    <Link
-                        to="/snake"
-                        className="rounded-3xl bg-white border border-slate-100 p-6 shadow-lg hover:shadow-xl transition"
-                    >
-                        <h2 className="text-2xl font-bold">Snake</h2>
-                        <p className="text-slate-600 mt-2">Rèn luyện phản xạ và tính điểm.</p>
-                    </Link>
+                    {GAME_CONFIGS.map((game) => (
+                        <Link
+                            key={game.key}
+                            to={game.route}
+                            className="rounded-3xl bg-white border border-slate-100 p-6 shadow-lg hover:shadow-xl transition"
+                        >
+                            <h2 className="text-2xl font-bold">{game.name}</h2>
+                            <p className="text-slate-600 mt-2">{game.description}</p>
+                        </Link>
+                    ))}
                 </div>
 
                 <button
