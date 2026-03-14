@@ -7,6 +7,8 @@ use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Tymon\JWTAuth\Facades\JWTAuth;
+use Tymon\JWTAuth\Exceptions\JWTException;
 
 class AuthController extends Controller
 {
@@ -25,18 +27,71 @@ class AuthController extends Controller
             ], 401);
         }
 
+        $token = JWTAuth::fromUser($user);
+
         return response()->json([
             'message' => 'Đăng nhập thành công.',
-            'user' => [
-                'id' => $user->id,
-                'username' => $user->username,
-                'xp' => $user->xp,
-                'coin' => $user->coin,
-                'level' => $user->level,
-                'lives' => $user->lives,
-                'streak' => $user->streak,
-                'character_skin_id' => $user->character_skin_id,
-            ],
+            'token' => $token,
+            'user' => $this->formatUser($user),
         ]);
+    }
+
+    public function me(): JsonResponse
+    {
+        $user = auth('api')->user();
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'Token không hợp lệ.',
+            ], 401);
+        }
+
+        return response()->json([
+            'user' => $this->formatUser($user),
+        ]);
+    }
+
+    public function logout(): JsonResponse
+    {
+        try {
+            JWTAuth::parseToken()->invalidate();
+        } catch (JWTException $exception) {
+            return response()->json([
+                'message' => 'Không thể đăng xuất. Token không hợp lệ.',
+            ], 401);
+        }
+
+        return response()->json([
+            'message' => 'Đã đăng xuất.',
+        ]);
+    }
+
+    public function refresh(): JsonResponse
+    {
+        try {
+            $newToken = JWTAuth::parseToken()->refresh();
+        } catch (JWTException $exception) {
+            return response()->json([
+                'message' => 'Không thể làm mới token.',
+            ], 401);
+        }
+
+        return response()->json([
+            'token' => $newToken,
+        ]);
+    }
+
+    private function formatUser(User $user): array
+    {
+        return [
+            'id' => $user->id,
+            'username' => $user->username,
+            'xp' => $user->xp,
+            'coin' => $user->coin,
+            'level' => $user->level,
+            'lives' => $user->lives,
+            'streak' => $user->streak,
+            'character_skin_id' => $user->character_skin_id,
+        ];
     }
 }
